@@ -65,20 +65,27 @@ public class RequestController {
         possibleMoves.add(Move.LEFT);
         possibleMoves.add(Move.UP);
 
-        List<Move> foodMoves = moveTowardsFood.makeAMove(request, mySnake.getCoords()[0]);
-
         possibleMoves = checkTail.makeAMove(request, possibleMoves);
         possibleMoves = checkEdgeOfBoard.makeAMove(request, possibleMoves);
         possibleMoves = avoidOthers.makeAMove(request, possibleMoves);
 
+        List<Move> foodMoves = moveTowardsFood.makeAMove(request, mySnake.getCoords()[0]);
+        if (!foodMoves.isEmpty()  && mySnake.getHealth() < 80) {
+            foodMoves.retainAll(possibleMoves);
 
-        if (!foodMoves.isEmpty() && possibleMoves.contains(foodMoves.get(0)) && mySnake.getHealth() < 80) {
-            possibleMoves.add(0, foodMoves.get(0));
+            if (!foodMoves.isEmpty()) {
+                possibleMoves.add(0, foodMoves.get(0));
+            }
+
         }
 
-        Move move = possibleMoves.get(0);
-        if (move == null) {
+        Move move;
+        if(possibleMoves.isEmpty() ){
+            System.out.println("OUT OF OPTIONS");
             move = Move.RIGHT;
+        } else {
+            move = possibleMoves.get(0);
+            System.out.println("Actual Move " + move);
         }
 
         return new MoveResponse()

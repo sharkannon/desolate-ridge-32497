@@ -11,7 +11,6 @@ public class AvoidSelf implements BasicStrategy {
     @Override public List<Move> makeAMove(MoveRequest request, List<Move> moves) {
         Snake me = SnakeUtils.findSnakeByUUID(request.getYou(),request.getSnakes());
 
-        List<Move> remainingMoves = new ArrayList<>();
         if(me != null) {
             int[][] coords = me.getCoords();
             int[] head = coords[0];
@@ -38,6 +37,7 @@ public class AvoidSelf implements BasicStrategy {
                 }
             }
         }
+        System.out.println("AvoidSelf: " + moves.toString());
         return moves;
     }
 }

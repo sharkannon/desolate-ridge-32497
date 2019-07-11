@@ -21,6 +21,7 @@ public class CheckEdgeOfBoard implements BasicStrategy {
             }
         }
 
+        System.out.println("CheckEdgeOfBoard: " + nextPossibleSnakeMoves.toString());
         return nextPossibleSnakeMoves;
     }
 

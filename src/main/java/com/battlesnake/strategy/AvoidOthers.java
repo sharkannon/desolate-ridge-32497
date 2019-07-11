@@ -40,6 +40,7 @@ public class AvoidOthers implements BasicStrategy {
                 }
             }
         }
+        System.out.println("AvoidOthers: " + possibleSnakeMoves.toString());
         return possibleSnakeMoves;
     }
 }

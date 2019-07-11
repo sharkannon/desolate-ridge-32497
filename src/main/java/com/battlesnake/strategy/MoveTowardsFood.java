@@ -33,6 +33,7 @@ public class MoveTowardsFood {
             towardsFoodMoves.add(Move.DOWN);
         }
 
+        System.out.println("MoveTowardsFood: " + towardsFoodMoves.toString());
         return towardsFoodMoves;
     }
 }
