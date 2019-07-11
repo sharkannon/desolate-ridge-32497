@@ -16,9 +16,23 @@
 
 package com.battlesnake;
 
-import com.battlesnake.data.*;
-import java.util.*;
-import org.springframework.web.bind.annotation.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import com.battlesnake.data.HeadType;
+import com.battlesnake.data.Move;
+import com.battlesnake.data.MoveRequest;
+import com.battlesnake.data.MoveResponse;
+import com.battlesnake.data.StartRequest;
+import com.battlesnake.data.StartResponse;
+import com.battlesnake.data.TailType;
+import com.battlesnake.strategy.CheckEdgeOfBoard;
+import com.battlesnake.strategy.CheckSnakeTail;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class RequestController {
@@ -26,27 +40,36 @@ public class RequestController {
     @RequestMapping(value="/start", method=RequestMethod.POST, produces="application/json")
     public StartResponse start(@RequestBody StartRequest request) {
         return new StartResponse()
-                .setName("Simple Snake")
-                .setColor("#FF3497")
-                .setHeadUrl("http://vignette1.wikia.nocookie.net/nintendo/images/6/61/Bowser_Icon.png/revision/latest?cb=20120820000805&path-prefix=en")
-                .setHeadType(HeadType.DEAD)
+                .setName("Tron")
+                .setColor("#FF0000")
+                .setHeadUrl("http://www.supertouchart.com/wp-content/uploads/2016/07/539954915798600d2009de7b1f09530b.png")
+                .setHeadType(HeadType.FANG)
                 .setTailType(TailType.PIXEL)
-                .setTaunt("I can find food!");
+                .setTaunt("Trongggggalong!");
     }
 
     @RequestMapping(value="/move", method=RequestMethod.POST, produces = "application/json")
     public MoveResponse move(@RequestBody MoveRequest request) {
-        MoveResponse moveResponse = new MoveResponse();
-        
-        Snake mySnake = findOurSnake(request); // kind of handy to have our snake at this level
-        
-        List<Move> towardsFoodMoves = moveTowardsFood(request, mySnake.getCoords()[0]);
-        
-        if (towardsFoodMoves != null && !towardsFoodMoves.isEmpty()) {
-            return moveResponse.setMove(towardsFoodMoves.get(0)).setTaunt("I'm hungry");
-        } else {
-            return moveResponse.setMove(Move.DOWN).setTaunt("Oh Drat");
+        CheckEdgeOfBoard checkEdgeOfBoard = new CheckEdgeOfBoard();
+        CheckSnakeTail checkTail = new CheckSnakeTail();
+
+        List<Move> possibleMoves = new ArrayList<>();
+        possibleMoves.add(Move.RIGHT);
+        possibleMoves.add(Move.DOWN);
+        possibleMoves.add(Move.LEFT);
+        possibleMoves.add(Move.UP);
+
+        possibleMoves = checkTail.makeAMove(request, possibleMoves);
+        possibleMoves = checkEdgeOfBoard.makeAMove(request, possibleMoves);
+
+        Move move = possibleMoves.get(0);
+        if (move == null) {
+            move = Move.RIGHT;
         }
+
+        return new MoveResponse()
+                .setMove(move)
+                .setTaunt("Going Down!");
     }
 
     @RequestMapping(value="/end", method=RequestMethod.POST)
@@ -54,50 +77,6 @@ public class RequestController {
         // No response required
         Map<String, Object> responseObject = new HashMap<String, Object>();
         return responseObject;
-    }
-
-    /*
-     *  Go through the snakes and find your team's snake
-     *  
-     *  @param  request The MoveRequest from the server
-     *  @return         Your team's snake
-     */
-    private Snake findOurSnake(MoveRequest request) {
-        String myUuid = request.getYou();
-        List<Snake> snakes = request.getSnakes();
-        return snakes.stream().filter(thisSnake -> thisSnake.getId().equals(myUuid)).findFirst().orElse(null);
-    }
-
-
-    /*
-     *  Simple algorithm to find food
-     *  
-     *  @param  request The MoveRequest from the server
-     *  @param  request An integer array with the X,Y coordinates of your snake's head
-     *  @return         A Move that gets you closer to food
-     */    
-    public ArrayList<Move> moveTowardsFood(MoveRequest request, int[] mySnakeHead) {
-        ArrayList<Move> towardsFoodMoves = new ArrayList<>();
-
-        int[] firstFoodLocation = request.getFood()[0];
-
-        if (firstFoodLocation[0] < mySnakeHead[0]) {
-            towardsFoodMoves.add(Move.LEFT);
-        }
-
-        if (firstFoodLocation[0] > mySnakeHead[0]) {
-            towardsFoodMoves.add(Move.RIGHT);
-        }
-
-        if (firstFoodLocation[1] < mySnakeHead[1]) {
-            towardsFoodMoves.add(Move.UP);
-        }
-
-        if (firstFoodLocation[1] > mySnakeHead[1]) {
-            towardsFoodMoves.add(Move.DOWN);
-        }
-
-        return towardsFoodMoves;
     }
 
 }
