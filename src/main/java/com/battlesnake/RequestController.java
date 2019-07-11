@@ -24,15 +24,14 @@ import com.battlesnake.data.HeadType;
 import com.battlesnake.data.Move;
 import com.battlesnake.data.MoveRequest;
 import com.battlesnake.data.MoveResponse;
+import com.battlesnake.data.Snake;
 import com.battlesnake.data.StartRequest;
 import com.battlesnake.data.StartResponse;
 import com.battlesnake.data.TailType;
-import com.battlesnake.data.Snake;
 import com.battlesnake.strategy.AvoidOthers;
-import com.battlesnake.strategy.CheckEdgeOfBoard;
-import com.battlesnake.strategy.CheckSnakeTail;
-import com.battlesnake.strategy.MoveTowardsFood;
 import com.battlesnake.strategy.AvoidSelf;
+import com.battlesnake.strategy.CheckEdgeOfBoard;
+import com.battlesnake.strategy.MoveTowardsFood;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -57,7 +56,6 @@ public class RequestController {
         CheckEdgeOfBoard checkEdgeOfBoard = new CheckEdgeOfBoard();
         AvoidSelf checkTail = new AvoidSelf();
         AvoidOthers avoidOthers = new AvoidOthers();
-        CheckSnakeTail checkTail = new CheckSnakeTail();
         MoveTowardsFood moveTowardsFood = new MoveTowardsFood();
 
         Snake mySnake = findOurSnake(request);
