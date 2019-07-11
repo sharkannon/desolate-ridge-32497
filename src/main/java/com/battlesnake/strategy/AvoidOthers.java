@@ -34,15 +34,7 @@ public class AvoidOthers implements BasicStrategy {
                     possibleSnakeMoves.remove(Move.UP);
                 }
 
-                if (SnakeUtils.sameCoords(upupCoords, coords[i])) {
-                    possibleSnakeMoves.remove(Move.UP);
-                }
-
                 if (SnakeUtils.sameCoords(downCoords, coords[i])) {
-                    possibleSnakeMoves.remove(Move.DOWN);
-                }
-
-                if (SnakeUtils.sameCoords(downdownCoords, coords[i])) {
                     possibleSnakeMoves.remove(Move.DOWN);
                 }
 
@@ -50,17 +42,23 @@ public class AvoidOthers implements BasicStrategy {
                     possibleSnakeMoves.remove(Move.LEFT);
                 }
 
-                if (SnakeUtils.sameCoords(leftleftCoords, coords[i])) {
-                    possibleSnakeMoves.remove(Move.LEFT);
-                }
-
                 if (SnakeUtils.sameCoords(rightCoords, coords[i])) {
                     possibleSnakeMoves.remove(Move.RIGHT);
                 }
+            }
 
-                if (SnakeUtils.sameCoords(rightrightCoords, coords[i])) {
-                    possibleSnakeMoves.remove(Move.RIGHT);
-                }
+            int[] headCoords = snake.getCoords()[0];
+            if (SnakeUtils.sameCoords(upupCoords, headCoords)) {
+                possibleSnakeMoves.remove(Move.UP);
+            }
+            if (SnakeUtils.sameCoords(downdownCoords, headCoords)) {
+                possibleSnakeMoves.remove(Move.DOWN);
+            }
+            if (SnakeUtils.sameCoords(leftleftCoords, headCoords)) {
+                possibleSnakeMoves.remove(Move.LEFT);
+            }
+            if (SnakeUtils.sameCoords(rightrightCoords, headCoords)) {
+                possibleSnakeMoves.remove(Move.RIGHT);
             }
         }
         System.out.println("AvoidOthers: " + possibleSnakeMoves.toString());
