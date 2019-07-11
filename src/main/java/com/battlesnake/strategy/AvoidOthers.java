@@ -36,6 +36,9 @@ public class AvoidOthers implements BasicStrategy {
 
                 if (SnakeUtils.sameCoords(upupCoords, coords[i])) {
                     possibleSnakeMoves.remove(Move.UP);
+                } else if (possibleSnakeMoves.contains(Move.UP)){
+                    possibleSnakeMoves.remove(Move.UP);
+                    possibleSnakeMoves.add(0, Move.UP);
                 }
 
                 if (SnakeUtils.sameCoords(downCoords, coords[i])) {
@@ -44,6 +47,9 @@ public class AvoidOthers implements BasicStrategy {
 
                 if (SnakeUtils.sameCoords(downdownCoords, coords[i])) {
                     possibleSnakeMoves.remove(Move.DOWN);
+                } else if (possibleSnakeMoves.contains(Move.DOWN)) {
+                    possibleSnakeMoves.remove(Move.DOWN);
+                    possibleSnakeMoves.add(0, Move.DOWN);
                 }
 
                 if (SnakeUtils.sameCoords(leftCoords, coords[i])) {
@@ -52,6 +58,9 @@ public class AvoidOthers implements BasicStrategy {
 
                 if (SnakeUtils.sameCoords(leftleftCoords, coords[i])) {
                     possibleSnakeMoves.remove(Move.LEFT);
+                } else if (possibleSnakeMoves.contains(Move.LEFT)) {
+                    possibleSnakeMoves.remove(Move.LEFT);
+                    possibleSnakeMoves.add(0, Move.LEFT);
                 }
 
                 if (SnakeUtils.sameCoords(rightCoords, coords[i])) {
@@ -60,6 +69,9 @@ public class AvoidOthers implements BasicStrategy {
 
                 if (SnakeUtils.sameCoords(rightrightCoords, coords[i])) {
                     possibleSnakeMoves.remove(Move.RIGHT);
+                } else if (possibleSnakeMoves.contains(Move.RIGHT)) {
+                    possibleSnakeMoves.remove(Move.RIGHT);
+                    possibleSnakeMoves.add(0, Move.RIGHT);
                 }
             }
         }
