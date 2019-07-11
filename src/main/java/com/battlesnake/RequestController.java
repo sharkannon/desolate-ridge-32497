@@ -27,8 +27,10 @@ import com.battlesnake.data.MoveResponse;
 import com.battlesnake.data.StartRequest;
 import com.battlesnake.data.StartResponse;
 import com.battlesnake.data.TailType;
+import com.battlesnake.data.Snake;
 import com.battlesnake.strategy.CheckEdgeOfBoard;
 import com.battlesnake.strategy.CheckSnakeTail;
+import com.battlesnake.strategy.MoveTowardsFood;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -52,15 +54,23 @@ public class RequestController {
     public MoveResponse move(@RequestBody MoveRequest request) {
         CheckEdgeOfBoard checkEdgeOfBoard = new CheckEdgeOfBoard();
         CheckSnakeTail checkTail = new CheckSnakeTail();
+        MoveTowardsFood moveTowardsFood = new MoveTowardsFood();
 
+        Snake mySnake = findOurSnake(request);
         List<Move> possibleMoves = new ArrayList<>();
         possibleMoves.add(Move.RIGHT);
         possibleMoves.add(Move.DOWN);
         possibleMoves.add(Move.LEFT);
         possibleMoves.add(Move.UP);
 
+        List<Move> foodMoves = moveTowardsFood.makeAMove(request, mySnake.getCoords()[0]);
+
         possibleMoves = checkTail.makeAMove(request, possibleMoves);
         possibleMoves = checkEdgeOfBoard.makeAMove(request, possibleMoves);
+
+        if (!foodMoves.isEmpty() && possibleMoves.contains(foodMoves.get(0)) && mySnake.getHealth() < 80) {
+            possibleMoves.add(0, foodMoves.get(0));
+        }
 
         Move move = possibleMoves.get(0);
         if (move == null) {
@@ -77,6 +87,18 @@ public class RequestController {
         // No response required
         Map<String, Object> responseObject = new HashMap<String, Object>();
         return responseObject;
+    }
+
+    /*
+     *  Go through the snakes and find your team's snake
+     *
+     *  @param  request The MoveRequest from the server
+     *  @return         Your team's snake
+     */
+    private Snake findOurSnake(MoveRequest request) {
+        String myUuid = request.getYou();
+        List<Snake> snakes = request.getSnakes();
+        return snakes.stream().filter(thisSnake -> thisSnake.getId().equals(myUuid)).findFirst().orElse(null);
     }
 
 }
