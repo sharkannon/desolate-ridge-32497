@@ -42,12 +42,12 @@ public class RequestController {
     @RequestMapping(value="/start", method=RequestMethod.POST, produces="application/json")
     public StartResponse start(@RequestBody StartRequest request) {
         return new StartResponse()
-                .setName("Tron")
-                .setColor("#FF0000")
+                .setName("Desolate Ridge")
+                .setColor("#FFCC33")
                 .setHeadUrl("http://www.supertouchart.com/wp-content/uploads/2016/07/539954915798600d2009de7b1f09530b.png")
                 .setHeadType(HeadType.FANG)
                 .setTailType(TailType.PIXEL)
-                .setTaunt("Trongggggalong!");
+                .setTaunt("Hellooooowooooooorldddddddd!");
     }
 
     @RequestMapping(value="/move", method=RequestMethod.POST, produces = "application/json")
@@ -79,7 +79,7 @@ public class RequestController {
 
         return new MoveResponse()
                 .setMove(move)
-                .setTaunt("Going Down!");
+                .setTaunt("I live........<splat>!");
     }
 
     @RequestMapping(value="/end", method=RequestMethod.POST)
