@@ -27,8 +27,9 @@ import com.battlesnake.data.MoveResponse;
 import com.battlesnake.data.StartRequest;
 import com.battlesnake.data.StartResponse;
 import com.battlesnake.data.TailType;
+import com.battlesnake.strategy.AvoidOthers;
 import com.battlesnake.strategy.CheckEdgeOfBoard;
-import com.battlesnake.strategy.CheckSnakeTail;
+import com.battlesnake.strategy.AvoidSelf;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -51,7 +52,8 @@ public class RequestController {
     @RequestMapping(value="/move", method=RequestMethod.POST, produces = "application/json")
     public MoveResponse move(@RequestBody MoveRequest request) {
         CheckEdgeOfBoard checkEdgeOfBoard = new CheckEdgeOfBoard();
-        CheckSnakeTail checkTail = new CheckSnakeTail();
+        AvoidSelf checkTail = new AvoidSelf();
+        AvoidOthers avoidOthers = new AvoidOthers();
 
         List<Move> possibleMoves = new ArrayList<>();
         possibleMoves.add(Move.RIGHT);
@@ -61,6 +63,8 @@ public class RequestController {
 
         possibleMoves = checkTail.makeAMove(request, possibleMoves);
         possibleMoves = checkEdgeOfBoard.makeAMove(request, possibleMoves);
+        possibleMoves = avoidOthers.makeAMove(request, possibleMoves);
+
 
         Move move = possibleMoves.get(0);
         if (move == null) {
