@@ -17,9 +17,16 @@ public class AvoidOthers implements BasicStrategy {
 
             int[] head = myCoords[0];
             int[] upCoords = SnakeUtils.getPossibleMoveCoord(head, Move.UP);
+            int[] upupCoords = SnakeUtils.getPossibleMoveCoord(upCoords, Move.UP);
+
             int[] downCoords = SnakeUtils.getPossibleMoveCoord(head, Move.DOWN);
+            int[] downdownCoords = SnakeUtils.getPossibleMoveCoord(downCoords, Move.DOWN);
+
             int[] leftCoords = SnakeUtils.getPossibleMoveCoord(head, Move.LEFT);
+            int[] leftleftCoords = SnakeUtils.getPossibleMoveCoord(leftCoords, Move.LEFT);
+
             int[] rightCoords = SnakeUtils.getPossibleMoveCoord(head, Move.RIGHT);
+            int[] rightrightCoords = SnakeUtils.getPossibleMoveCoord(rightCoords, Move.RIGHT);
 
             int[][] coords = snake.getCoords();
             for (int i = 0; i < coords.length; i++) {
@@ -27,7 +34,15 @@ public class AvoidOthers implements BasicStrategy {
                     possibleSnakeMoves.remove(Move.UP);
                 }
 
+                if (SnakeUtils.sameCoords(upupCoords, coords[i])) {
+                    possibleSnakeMoves.remove(Move.UP);
+                }
+
                 if (SnakeUtils.sameCoords(downCoords, coords[i])) {
+                    possibleSnakeMoves.remove(Move.DOWN);
+                }
+
+                if (SnakeUtils.sameCoords(downdownCoords, coords[i])) {
                     possibleSnakeMoves.remove(Move.DOWN);
                 }
 
@@ -35,7 +50,15 @@ public class AvoidOthers implements BasicStrategy {
                     possibleSnakeMoves.remove(Move.LEFT);
                 }
 
+                if (SnakeUtils.sameCoords(leftleftCoords, coords[i])) {
+                    possibleSnakeMoves.remove(Move.LEFT);
+                }
+
                 if (SnakeUtils.sameCoords(rightCoords, coords[i])) {
+                    possibleSnakeMoves.remove(Move.RIGHT);
+                }
+
+                if (SnakeUtils.sameCoords(rightrightCoords, coords[i])) {
                     possibleSnakeMoves.remove(Move.RIGHT);
                 }
             }
