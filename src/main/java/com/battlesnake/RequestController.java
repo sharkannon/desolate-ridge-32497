@@ -54,7 +54,7 @@ public class RequestController {
     @RequestMapping(value="/move", method=RequestMethod.POST, produces = "application/json")
     public MoveResponse move(@RequestBody MoveRequest request) {
         CheckEdgeOfBoard checkEdgeOfBoard = new CheckEdgeOfBoard();
-        AvoidSelf checkTail = new AvoidSelf();
+        AvoidSelf avoidSelf = new AvoidSelf();
         AvoidOthers avoidOthers = new AvoidOthers();
         MoveTowardsFood moveTowardsFood = new MoveTowardsFood();
 
@@ -65,7 +65,13 @@ public class RequestController {
         possibleMoves.add(Move.LEFT);
         possibleMoves.add(Move.UP);
 
+<<<<<<< HEAD
         possibleMoves = checkTail.makeAMove(request, possibleMoves);
+=======
+        List<Move> foodMoves = moveTowardsFood.makeAMove(request, mySnake.getCoords()[0]);
+
+        possibleMoves = avoidSelf.makeAMove(request, possibleMoves);
+>>>>>>> 709ab078136f1f13c4a3fec1c8f5db54b6e5f6a6
         possibleMoves = checkEdgeOfBoard.makeAMove(request, possibleMoves);
         possibleMoves = avoidOthers.makeAMove(request, possibleMoves);
 

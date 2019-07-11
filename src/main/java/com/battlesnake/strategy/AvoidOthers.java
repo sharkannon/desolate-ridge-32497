@@ -22,7 +22,7 @@ public class AvoidOthers implements BasicStrategy {
             int[] rightCoords = SnakeUtils.getPossibleMoveCoord(head, Move.RIGHT);
 
             int[][] coords = snake.getCoords();
-            for(int i = 1; i< coords.length; i++) {
+            for (int i = 0; i < coords.length; i++) {
                 if (SnakeUtils.sameCoords(upCoords, coords[i])) {
                     possibleSnakeMoves.remove(Move.UP);
                 }
